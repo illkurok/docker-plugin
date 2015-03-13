@@ -53,6 +53,11 @@ public class DockerTemplate extends DockerTemplateBase implements Describable<Do
     public final String idleTerminationMinutes;
 
     /**
+     * Minutes before SSHLauncher times out on launch
+     */
+    public final String sshLaunchTimeoutMinutes;
+
+    /**
      * Field jvmOptions.
      */
     public final String jvmOptions;
@@ -90,11 +95,13 @@ public class DockerTemplate extends DockerTemplateBase implements Describable<Do
                           String remoteFs,
                           String remoteFsMapping,
                           String credentialsId, String idleTerminationMinutes,
+                          String sshLaunchTimeoutMinutes,
                           String jvmOptions, String javaPath,
                           String prefixStartSlaveCmd, String suffixStartSlaveCmd,
                           String instanceCapStr, String dnsString,
                           String dockerCommand,
                           String volumesString, String volumesFrom,
+                          String environmentsString,
                           String lxcConfString,
                           String hostname,
                           String bindPorts,
@@ -102,7 +109,7 @@ public class DockerTemplate extends DockerTemplateBase implements Describable<Do
                           boolean privileged
 
     ) {
-        super(image, dnsString,dockerCommand,volumesString,volumesFrom,lxcConfString,hostname,
+        super(image, dnsString,dockerCommand,volumesString,volumesFrom,environmentsString,lxcConfString,hostname,
                 Objects.firstNonNull(bindPorts, "0.0.0.0:22"), bindAllPorts,
                 privileged);
 
@@ -110,6 +117,7 @@ public class DockerTemplate extends DockerTemplateBase implements Describable<Do
         this.labelString = Util.fixNull(labelString);
         this.credentialsId = credentialsId;
         this.idleTerminationMinutes = idleTerminationMinutes;
+        this.sshLaunchTimeoutMinutes = sshLaunchTimeoutMinutes;
         this.jvmOptions = jvmOptions;
         this.javaPath = javaPath;
         this.prefixStartSlaveCmd = prefixStartSlaveCmd;
@@ -169,6 +177,18 @@ public class DockerTemplate extends DockerTemplateBase implements Describable<Do
         return labelSet;
     }
 
+    public int getSSHLaunchTimeoutMinutes() {
+        if (sshLaunchTimeoutMinutes == null || sshLaunchTimeoutMinutes.trim().isEmpty()) {
+            return 1;
+        } else {
+            try {
+                return Integer.parseInt(sshLaunchTimeoutMinutes);
+            } catch (NumberFormatException nfe) {
+                LOGGER.log(Level.INFO, "Malformed SSH Launch Timeout value: {0}", sshLaunchTimeoutMinutes);
+                return 1;
+            }
+        }
+    }
     /**
      * Initializes data structure that we don't persist.
      */
