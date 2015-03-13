@@ -98,12 +98,13 @@ public class DockerTemplate extends DockerTemplateBase implements Describable<Do
                           String lxcConfString,
                           String hostname,
                           String bindPorts,
+                          String extraHosts,
                           boolean bindAllPorts,
                           boolean privileged
 
     ) {
         super(image, dnsString,dockerCommand,volumesString,volumesFrom,lxcConfString,hostname,
-                Objects.firstNonNull(bindPorts, "0.0.0.0:22"), bindAllPorts,
+                Objects.firstNonNull(bindPorts, "0.0.0.0:22"), extraHosts, bindAllPorts,
                 privileged);
 
 
@@ -203,7 +204,8 @@ public class DockerTemplate extends DockerTemplateBase implements Describable<Do
     public DockerSlave provision(StreamTaskListener listener) throws IOException, Descriptor.FormException, DockerException {
             PrintStream logger = listener.getLogger();
 
-
+            //pcassidy
+        LOGGER.log(Level.FINE, "Launching image.");
         logger.println("Launching " + image );
 
         int numExecutors = 1;

@@ -28,6 +28,8 @@ public class DockerBuilderControlOptionProvisionAndStart extends DockerBuilderCo
 
         DockerTemplate template = getCloud(build).getTemplate(templateId);
 
+        //pcassidy
+        LOGGER.info("Provisioning container");
         String containerId = template.provisionNew().getId();
 
         LOGGER.info("Starting container " + containerId);

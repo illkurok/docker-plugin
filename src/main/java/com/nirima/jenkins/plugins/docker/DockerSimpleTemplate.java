@@ -17,6 +17,7 @@ public class DockerSimpleTemplate extends DockerTemplateBase implements Describa
                                 String lxcConfString,
                                 String hostname,
                                 String bindPorts,
+                                String extraHosts,
                                 boolean bindAllPorts,
                                 boolean privileged) {
         super(image,
@@ -27,6 +28,7 @@ public class DockerSimpleTemplate extends DockerTemplateBase implements Describa
                 lxcConfString,
                 hostname,
                 bindPorts,
+                extraHosts,
                 bindAllPorts,
                 privileged);
     }

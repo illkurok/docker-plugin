@@ -47,6 +47,7 @@ public abstract class DockerTemplateBase {
     public final String volumesFrom;
 
     public final String bindPorts;
+    public final String extraHosts;
     public final boolean bindAllPorts;
 
     public final boolean privileged;
@@ -58,6 +59,7 @@ public abstract class DockerTemplateBase {
                           String lxcConfString,
                           String hostname,
                           String bindPorts,
+                          String extraHosts,
                           boolean bindAllPorts,
                           boolean privileged
 
@@ -66,6 +68,7 @@ public abstract class DockerTemplateBase {
 
         this.dockerCommand = dockerCommand;
         this.lxcConfString = lxcConfString;
+        this.extraHosts = extraHosts;
         this.privileged = privileged;
         this.hostname = hostname;
 
@@ -110,15 +113,22 @@ public abstract class DockerTemplateBase {
     }
 
     public ContainerInspectResponse provisionNew(DockerClient dockerClient) throws DockerException {
-
+    	//pcassidy
+    	LOGGER.info("Creating Container Config");
         ContainerConfig containerConfig = createContainerConfig();
 
+        //pcassidy
+    	LOGGER.info("Creating Container.");
         ContainerCreateResponse container = dockerClient.containers().create(containerConfig);
 
         // Launch it.. :
-
+        
+        //pcassidy
+    	LOGGER.info("Creating Host Config.");
         HostConfig hostConfig = createHostConfig();
 
+        //pcassidy
+    	LOGGER.info("Launching container " + container.getId());
         dockerClient.container(container.getId()).start(hostConfig);
 
         String containerId = container.getId();
@@ -134,6 +144,15 @@ public abstract class DockerTemplateBase {
         }
         return dockerCommandArray;
     }
+    
+    protected String[] getExtraHostsArray() {
+        String[] extraHostsArray = new String[0];
+
+       if(extraHosts != null && !extraHosts.isEmpty()){
+    	   extraHostsArray = extraHosts.split(" ");
+       }
+       return extraHostsArray;
+   }
 
     protected Iterable<PortMapping> getPortMappings() {
 
@@ -167,12 +186,22 @@ public abstract class DockerTemplateBase {
     }
 
     public HostConfig createHostConfig() {
+    	try{
         HostConfig hostConfig = new HostConfig();
 
         hostConfig.setPortBindings( getPortMappings() );
         hostConfig.setPublishAllPorts( bindAllPorts );
 
-
+        String[] exHosts = getExtraHostsArray();
+        if( exHosts.length > 0 ) {
+        	//pcassidy
+        	LOGGER.info("exHosts size: " + exHosts.length);
+        	//pcassidy
+    		LOGGER.info("exHosts[0]: " + exHosts[0]);
+            hostConfig.setExtraHosts(exHosts);
+          //pcassidy
+    		LOGGER.info("successfully set ExtraHosts?");
+        }
         hostConfig.setPrivileged(this.privileged);
         if( dnsHosts.length > 0 )
             hostConfig.setDns(dnsHosts);
@@ -189,6 +218,10 @@ public abstract class DockerTemplateBase {
             hostConfig.setVolumesFrom(new String[] {volumesFrom});
 
         return hostConfig;
+    	}catch(Exception e){
+    		LOGGER.info(e.getMessage());
+    	}
+    	return null;
     }
 
     @Override

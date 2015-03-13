@@ -43,6 +43,7 @@ public class DockerBuilderControlOptionRun extends DockerBuilderControlCloudOpti
     public final String lxcConfString;
     public final boolean privileged;
     public final String hostname;
+    public final String extraHosts;
     public final String bindPorts;
     public final boolean bindAllPorts;
 
@@ -55,6 +56,7 @@ public class DockerBuilderControlOptionRun extends DockerBuilderControlCloudOpti
             String volumesString, String volumesFrom,
             String hostname,
             String bindPorts,
+            String extraHosts,
             boolean bindAllPorts,
             boolean privileged) {
         super(cloudName);
@@ -66,6 +68,7 @@ public class DockerBuilderControlOptionRun extends DockerBuilderControlCloudOpti
         this.volumesString = volumesString;
         this.volumesFrom = volumesFrom;
         this.privileged = privileged;
+        this.extraHosts = extraHosts;
         this.hostname = hostname;
         this.bindPorts = bindPorts;
         this.bindAllPorts = bindAllPorts;
@@ -95,7 +98,7 @@ public class DockerBuilderControlOptionRun extends DockerBuilderControlCloudOpti
 
         DockerTemplateBase template = new DockerSimpleTemplate(xImage,
                 dnsString, xCommand,
-                volumesString, volumesFrom, lxcConfString, xHostname, bindPorts, bindAllPorts, privileged);
+                volumesString, volumesFrom, lxcConfString, xHostname, bindPorts, extraHosts, bindAllPorts, privileged);
 
         String containerId = template.provisionNew(client).getId();
 
