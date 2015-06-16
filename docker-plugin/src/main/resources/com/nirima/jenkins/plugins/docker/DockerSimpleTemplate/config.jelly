@@ -58,6 +58,10 @@
         <f:entry title="${%Mac address}" field="macAddress">
             <f:textbox/>
         </f:entry>
+        <f:entry title="${%Hosts file entry}" field="extraHosts">
+            <f:textbox/>
+        </f:entry>
+
 
         </f:advanced>
 </j:jelly>

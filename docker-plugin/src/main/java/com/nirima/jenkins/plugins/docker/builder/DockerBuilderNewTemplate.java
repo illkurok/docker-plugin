@@ -59,6 +59,7 @@ public class DockerBuilderNewTemplate extends Builder implements Serializable {
     public final String environmentsString;
     public final String lxcConfString;
     public final String bindPorts;
+    public final String extraHosts;
     public final boolean bindAllPorts;
     public final boolean privileged;
     public final boolean tty;
@@ -81,6 +82,7 @@ public class DockerBuilderNewTemplate extends Builder implements Serializable {
                                               String lxcConfString,
                                               String hostname,
                                               String bindPorts,
+                                              String extraHosts,
                                               boolean bindAllPorts,
                                               boolean privileged,
                                               boolean tty,
@@ -109,6 +111,7 @@ public class DockerBuilderNewTemplate extends Builder implements Serializable {
         this.lxcConfString = lxcConfString;
         this.bindPorts = bindPorts;
         this.bindAllPorts = bindAllPorts;
+        this.extraHosts = extraHosts;
         this.privileged = privileged;
         this.tty = tty;
         this.hostname = hostname;
@@ -157,6 +160,7 @@ public class DockerBuilderNewTemplate extends Builder implements Serializable {
                         prefixStartSlaveCmd,
                         suffixStartSlaveCmd, instanceCapStr,
                         dnsString, dockerCommand,
+                        volumesString, volumesFrom, lxcConfString, hostname, bindPorts, extraHosts, bindAllPorts, privileged);
                         volumesString, volumesFrom, environmentsString, lxcConfString, hostname,
                         bindPorts, bindAllPorts, privileged, tty, macAddress);
                 ((DockerCloud) c).addTemplate(t);
