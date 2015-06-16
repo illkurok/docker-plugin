@@ -34,6 +34,7 @@ public class DockerBuilderControlOptionRun extends DockerBuilderControlCloudOpti
     public final boolean privileged;
     public final boolean tty;
     public final String hostname;
+    public final String extraHosts;
     public final String bindPorts;
     public final Integer memoryLimit;
     public final Integer cpuShares;
@@ -52,6 +53,7 @@ public class DockerBuilderControlOptionRun extends DockerBuilderControlCloudOpti
             Integer memoryLimit,
             Integer cpuShares,
             String bindPorts,
+            String extraHosts,
             boolean bindAllPorts,
             boolean privileged,
             boolean tty,
@@ -66,6 +68,7 @@ public class DockerBuilderControlOptionRun extends DockerBuilderControlCloudOpti
         this.volumesFrom = volumesFrom;
         this.environmentsString = environmentsString;
         this.privileged = privileged;
+        this.extraHosts = extraHosts;
         this.tty = tty;
         this.hostname = hostname;
         this.bindPorts = bindPorts;
@@ -97,6 +100,7 @@ public class DockerBuilderControlOptionRun extends DockerBuilderControlCloudOpti
 
         DockerTemplateBase template = new DockerSimpleTemplate(xImage,
                 dnsString, xCommand,
+                volumesString, volumesFrom, lxcConfString, xHostname, bindPorts, extraHosts, bindAllPorts, privileged);
                 volumesString, volumesFrom, environmentsString, lxcConfString, xHostname,
                 memoryLimit, cpuShares, bindPorts, bindAllPorts, privileged, tty, macAddress);
 
