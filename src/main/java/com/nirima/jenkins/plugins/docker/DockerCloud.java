@@ -121,10 +121,6 @@ public class DockerCloud extends Cloud {
 
             connection = builder.build();
         }
-        
-        //pcassidy
-        LOGGER.log(Level.FINE, "Connection built. Returning connection.");
-        
         return connection;
 
     }
